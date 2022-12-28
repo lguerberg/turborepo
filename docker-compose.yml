@@ -5,8 +5,13 @@ services:
     container_name: web
     build:
       context: .
-      dockerfile: ./apps/web/Dockerfile
+      dockerfile: ./apps/web/docker/dev.Dockerfile
     restart: always
+    volumes:
+      - ./apps/web/src:/app/apps/web/src
+      - ./packages/ui:/app/packages/ui
+      - /apps/web/node_modules
+      - /apps/web/.next
     ports:
       - 3000:3000
     networks:
@@ -15,15 +20,14 @@ services:
     container_name: api
     build:
       context: .
-      dockerfile: ./apps/api/Dockerfile
+      dockerfile: ./apps/api/docker/dev.Dockerfile
     restart: always
+    volumes:
+      - ./apps/api/src:/app/apps/api/src
     ports:
       - 3001:3001
     networks:
       - app_network
 
-# Define a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
 networks:
   app_network:
-    external: true
